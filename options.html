@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steam Deal Finder Settings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { 
+            width: 320px; 
+            font-size: 0.9rem; 
+            background-color: #1b2838;
+            color: #c7d5e0;
+        }
+        .container { padding: 0.75rem; }
+        .slider-label { display: flex; justify-content: space-between; font-weight: bold; align-items: center; }
+
+        h5 {
+            color: #66c0f4;
+            border-bottom: 1px solid #2a475e;
+            padding-bottom: 5px;
+            margin-top: 1rem;
+        }
+
+        .card {
+            background-color: #171a21;
+            border: 1px solid #2a475e;
+        }
+
+        .form-label {
+            color: #c7d5e0;
+        }
+
+        .form-range::-webkit-slider-thumb {
+            background: #66c0f4;
+        }
+
+        .form-range::-moz-range-thumb {
+            background: #66c0f4;
+        }
+
+        .form-range::-ms-thumb {
+            background: #66c0f4;
+        }
+
+        #reviewSentimentLabel {
+            background-color: #2a475e !important;
+            color: #c7d5e0;
+        }
+        
+        .btn-primary {
+            background-color: #66c0f4;
+            border-color: #66c0f4;
+            color: #171a21;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            background-color: #7ccff6;
+            border-color: #7ccff6;
+            color: #171a21;
+        }
+
+        #reviewValue {
+            color: #66c0f4;
+        }
+       
+
+        .discount-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .discount_pct {
+            background-color: #4c6b22;
+            color: #a4d007;
+            padding: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h5 class="mb-3">Filter</h5>
+
+        <div class="card mb-3">
+            <div class="card-body p-2">
+                <div class="slider-label">
+                    <label for="discountSlider" class="form-label">Min. Discount</label>
+                    <div class="discount-container">
+                        <div id="discountValue" class="discount_pct">-70%</div>
+                    </div>
+                </div>
+                <input type="range" class="form-range" min="0" max="95" step="5" id="discountSlider">
+            </div>
+        </div>
+
+        <h5 class="mb-3">Highlight</h5>
+        <div class="card">
+            <div class="card-body p-2">
+                <div class="slider-label">
+                    <label for="reviewSlider" class="form-label">Min. Review Score</label>
+                    <output id="reviewValue">75%</output>
+                </div>
+                <input type="range" class="form-range" min="0" max="95" step="5" id="reviewSlider" list="review-steps">
+                <datalist id="review-steps">
+                    <option value="0"></option>
+                    <option value="50"></option>
+                    <option value="75"></option>
+                    <option value="90"></option>
+                    <option value="95"></option>
+                </datalist>
+                <div class="text-center mt-1">
+                    <span id="reviewSentimentLabel" class="badge">Mostly Positive</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-grid gap-2 mt-3">
+            <button id="save" class="btn btn-primary btn-sm">Save</button>
+        </div>
+        <div id="status" class="mt-2 text-center"></div>
+    </div>
+    <script src="options.js"></script>
+</body>
+</html> 
