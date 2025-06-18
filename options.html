@@ -65,6 +65,58 @@
             color: #66c0f4;
         }
        
+        .star-plot-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 20px auto 1rem auto;
+        }
+
+        .star-plot-container .slider-label {
+            position: absolute;
+            width: 80px;
+            font-size: 0.8em;
+            color: #c7d5e0;
+            text-align: center;
+            display: block;
+        }
+
+        .label-value {
+            display: block;
+            color: #66c0f4;
+            font-weight: bold;
+        }
+
+        /* --- Label Positioning --- */
+
+        /* Top: Discount (vertical) */
+        .label-discount {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Bottom: Age (vertical) */
+        .label-age {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Left: Review (horizontal) */
+        .label-review {
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Right: Popularity (horizontal) */
+        .label-popularity {
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            
+        }
 
         .discount-container {
             display: flex;
@@ -74,9 +126,85 @@
         .discount_pct {
             background-color: #4c6b22;
             color: #a4d007;
-            padding: 5px;
+            padding: 3px 5px;
             font-size: 0.8rem;
             font-weight: bold;
+        }
+
+        .tooltip-icon {
+            position: relative;
+            cursor: pointer;
+            font-weight: bold;
+            color: #c7d5e0;
+            margin-left: 4px;
+            border: 1px solid #66c0f4;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+        }
+
+        .tooltip-icon::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2a475e;
+            color: #c7d5e0;
+            padding: 5px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            z-index: 10;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+        }
+
+        .tooltip-icon:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .form-range {
+            padding: 0;
+        }
+        .form-range::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: #66c0f4;
+            border-radius: 5px;
+        }
+        .form-range::-webkit-slider-thumb {
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -5px;
+        }
+        .form-range:focus::-webkit-slider-thumb {
+            box-shadow: 0 0 0 0.25rem rgba(102, 192, 244, 0.25);
+        }
+        .form-range::-moz-range-track {
+            width: 100%;
+            height: 12px;
+            cursor: pointer;
+            background: #2a475e;
+            border-radius: 5px;
+        }
+        .form-range::-moz-range-thumb {
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #66c0f4;
+            cursor: pointer;
         }
 
     </style>
@@ -94,6 +222,81 @@
                     </div>
                 </div>
                 <input type="range" class="form-range" min="0" max="95" step="5" id="discountSlider">
+            </div>
+        </div>
+
+       
+
+        <h5 class="mb-3 mt-3">Scoring Weights</h5>
+        <div class="card">
+            <div class="card-body p-2">
+                <div class="star-plot-container">
+                    <canvas id="starPlotCanvas" width="200" height="200"></canvas>
+                    <div class="slider-label label-discount">
+                        <span>Discount</span>
+                        <output id="discountWeightValue" class="label-value">40%</output>
+                    </div>
+                    
+                    <div class="slider-label label-review">
+                        <span>Reviews</span>
+                        <output id="reviewWeightValue" class="label-value">25%</output>
+                    </div>
+
+                    <div class="slider-label label-popularity">
+                        <span>Popularity</span>
+                        <output id="popularityWeightValue" class="label-value">20%</output>
+                    </div>
+
+                    <div class="slider-label label-age">
+                        <span>Age</span>
+                        <output id="ageWeightValue" class="label-value">15%</output>
+                    </div>
+                </div>
+
+                <div id="weight-inputs">
+                    <div class="row">
+                        <div class="col">
+                            <label for="discountWeight" class="form-label small d-flex align-items-center">Discount
+                                <span class="tooltip-icon" data-tooltip="Prioritize high percentage discounts.">?</span>
+                            </label>
+                            <div class="d-flex align-items-center gap-2">
+                                <output id="discountWeightOutput" class="small fw-bold" style="color: #66c0f4; min-width: 25px; text-align: right;">40</output>
+                                <input type="range" class="form-range weight-input" id="discountWeight" value="40" min="0" max="100">
+                                
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="reviewWeight" class="form-label small d-flex align-items-center">Reviews
+                                <span class="tooltip-icon" data-tooltip="Prioritize review scores.">?</span>
+                            </label>
+                            <div class="d-flex align-items-center gap-2">
+                                <input type="range" class="form-range weight-input" id="reviewWeight" value="25" min="0" max="100">
+                                <output id="reviewWeightOutput" class="small fw-bold" style="color: #66c0f4; min-width: 25px; text-align: right;">25</output>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col">
+                            <label for="popularityWeight" class="form-label small d-flex align-items-center">Popularity
+                                <span class="tooltip-icon" data-tooltip="Prioritize total reviews over time.">?</span>
+                            </label>
+                            <div class="d-flex align-items-center gap-2">
+                                <output id="popularityWeightOutput" class="small fw-bold" style="color: #66c0f4; min-width: 25px; text-align: right;">20</output>
+                                <input type="range" class="form-range weight-input" id="popularityWeight" value="20" min="0" max="100">
+                                
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="ageWeight" class="form-label small d-flex align-items-center">Age
+                                <span class="tooltip-icon" data-tooltip="Prioritize newer titles.">?</span>
+                            </label>
+                            <div class="d-flex align-items-center gap-2">
+                                <input type="range" class="form-range weight-input" id="ageWeight" value="15" min="0" max="100">
+                                <output id="ageWeightOutput" class="small fw-bold" style="color: #66c0f4; min-width: 25px; text-align: right;">15</output>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

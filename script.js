@@ -1,17 +1,28 @@
-function calculateDiscountQualityScore(discount, reviewScore, numReviews, releaseDate) {
+function getStarRating(sentimentText) {
+    switch (sentimentText) {
+        case 'Overwhelmingly Positive':
+            return 5;
+        case 'Very Positive':
+            return 4;
+        case 'Mostly Positive':
+            return 3;
+        case 'Mixed':
+            return 2;
+        case 'Mostly Negative':
+            return 1;
+        default:
+            return 0;
+    }
+}
+
+function calculateDiscountQualityScore(discount, reviewStars, numReviews, releaseDate, weights) {
     const days = Math.max((Date.now() - releaseDate.getTime()) / 86400000, 1);
     const d = Math.abs(discount) / 100;
-    const r = Math.min(reviewScore / 100, 1);
+    const r = reviewStars / 5;
     const v = Math.log10(numReviews / days + 1) / Math.log10(50);
     const t = Math.log10(days) / Math.log10(3650);
-
-    // --- Weights ---
-    const w_D = 0.4;
-    const w_R = 0.25;
-    const w_V = 0.2;
-    const w_T = 0.15;
     
-    return w_D * d + w_R * r + w_V * v + w_T * t;
+    return weights.d * d + weights.r * r + weights.v * v + weights.t * t;
 }
 
 function initializeDealFinder() {
@@ -57,6 +68,8 @@ function initializeDealFinder() {
                 // Step 2: Extract data for scoring and highlighting
                 const discount = parseFloat(discountPctText.replace('-', '').replace('%', ''));
                 const tooltipHtml = a.find('span[data-tooltip-html]').attr('data-tooltip-html');
+                const sentimentText = tooltipHtml ? tooltipHtml.split('<br>')[0] : '';
+                const reviewStars = getStarRating(sentimentText);
                 const reviewMatch = tooltipHtml ? tooltipHtml.match(/(\d+)% of the ([\d,]+) user reviews/) : null;
                 const reviewScore = reviewMatch && reviewMatch[1] ? parseInt(reviewMatch[1], 10) : 0;
                 const numReviews = reviewMatch && reviewMatch[2] ? parseInt(reviewMatch[2].replace(/,/g, ''), 10) : 0;
@@ -74,7 +87,7 @@ function initializeDealFinder() {
                 // Step 4: Calculate and display score
                 let score = 0;
                 if (discount && reviewScore && numReviews && releaseDate) {
-                    score = calculateDiscountQualityScore(discount, reviewScore, numReviews, releaseDate);
+                    score = calculateDiscountQualityScore(discount, reviewStars, numReviews, releaseDate, settings.weights);
                     const scoreDisplay = $J('<div class="deal_score"></div>');
                     scoreDisplay.text(`Score: ${(score * 100).toFixed(2)}`);
                     scoreDisplay.css({
