@@ -20,7 +20,7 @@ function calculateDiscountQualityScore(discount, reviewStars, numReviews, releas
     const d = Math.abs(discount) / 100;
     const r = reviewStars / 5;
     const v = Math.log10(numReviews / days + 1) / Math.log10(50);
-    const t = Math.log10(days) / Math.log10(3650);
+    const t = Math.max(0, 1 - (Math.log10(days) / Math.log10(3650)));
     
     return weights.d * d + weights.r * r + weights.v * v + weights.t * t;
 }
@@ -75,6 +75,11 @@ function initializeDealFinder() {
                 const numReviews = reviewMatch && reviewMatch[2] ? parseInt(reviewMatch[2].replace(/,/g, ''), 10) : 0;
                 const releaseDateText = a.find('div.search_released').text().trim();
                 const releaseDate = releaseDateText ? new Date(releaseDateText) : new Date();
+
+                if(releaseDateText == null || releaseDateText == '') {
+                    a.remove();
+                    return;
+                }
 
                 // Step 3: Highlight by review criteria
                 //if (settings.highlighting && reviewScore >= settings.minPercentile) {

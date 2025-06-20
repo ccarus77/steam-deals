@@ -132,8 +132,13 @@ function auto_save_options() {
 function save_options() {
   const settings = get_settings_from_dom();
   chrome.storage.sync.set(settings, function() {
+    const saveButton = document.getElementById('save');
     const status = document.getElementById('status');
-    status.innerHTML = '<div class="alert alert-success p-2" role="alert">Options saved, refreshing...</div>';
+    
+    // Hide the save button and show status
+    saveButton.style.display = 'none';
+    status.style.display = 'block';
+    status.textContent = 'Options saved, refreshing...';
     
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       if (tabs[0] && tabs[0].id) {

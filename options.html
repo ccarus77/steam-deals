@@ -70,7 +70,7 @@ h5 {
     position: relative;
     width: 200px;
     height: 200px;
-    margin: 20px auto 1rem auto;
+    margin: 20px auto 20px auto;
 }
 
 .star-plot-container .slider-label {
@@ -206,13 +206,64 @@ h5 {
     border-radius: 50%;
     background: #66c0f4;
     cursor: pointer;
-} 
+}
+
+.divider {
+    border-top: 1px solid #2a475e;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.btn-steam-link {
+    color: #66c0f4;
+    border: 1px solid #2a475e;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.2rem;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    background-color: #2a475e;
+}
+.btn-steam-link:hover {
+    background-color: #66c0f4;
+    color: #171a21;
+    border-color: #66c0f4;
+}
+
+.btn-save {
+    color: #66c0f4;
+    border: 1px solid #2a475e;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.2rem;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    background-color: #2a475e;
+    cursor: pointer;
+    width: 100%;
+}
+.btn-save:hover {
+    background-color: #66c0f4;
+    color: #171a21;
+    border-color: #66c0f4;
+}
+
+.status-container {
+    display: none;
+    text-align: center;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.2rem;
+    background-color: #4c6b22;
+    color: #a4d007;
+    border: 1px solid #2a475e;
+}
     </style>
 </head>
 <body>
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-1">
-            <a href="https://store.steampowered.com/search/?specials=1" target="_blank" class="h5 mb-0 text-decoration-none">Steam Specials!</a>
+            <a href="https://store.steampowered.com/search/?specials=1" target="_blank" class="btn-steam-link">Find Steam Specials! <svg width="13" height="13" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: text-top; margin-left: 3px;"><path d="M4.5 2.5H2.5V12.5H12.5V10.5M7.5 7.5L12.5 2.5M12.5 2.5V6.5M12.5 2.5H8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="extensionEnabledToggle" checked>
                 <label class="form-check-label" for="extensionEnabledToggle">On</label>
@@ -262,7 +313,9 @@ h5 {
                     </div>
                 </div>
                 
-                <div id="weight-inputs">
+                <hr class="divider">
+
+                <div id="weight-inputs" class="mb-2">
                     <div class="row">
                         <div class="col">
                             <label for="discountWeight" class="form-label small d-flex align-items-center">Discount
@@ -301,7 +354,7 @@ h5 {
                             </label>
                             <div class="d-flex align-items-center gap-2">
                                 <input type="range" class="form-range weight-input" id="ageWeight" value="15" min="0" max="100">
-                                <output id="ageWeightOutput" class="small fw-bold" style="color: #66c0f4; min-width: 25px; text-align: right;">15</output>
+                                <output id="ageWeightOutput" class="small fw-bold" style="color: #66c0f4; min-width: 25px; text-align: right;">10</output>
                             </div>
                         </div>
                     </div>
@@ -338,10 +391,10 @@ h5 {
         </div>
     </div>
         
-        <div class="d-grid gap-2 mt-3">
-            <button id="save" class="btn btn-primary btn-sm">Save and Refresh</button>
+        <div class="d-grid gap-2 mt-2">
+            <button id="save" class="btn-save">Save and Refresh</button>
+            <div id="status" class="status-container"></div>
         </div>
-        <div id="status" class="mt-2 text-center"></div>
     </div>
     <script src="options.js"></script>
 </body>
