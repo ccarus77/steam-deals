@@ -100,9 +100,11 @@ function drawStarPlot() {
     ctx.fill();
 }
 
-function save_options() {
+function get_settings_from_dom() {
   const discountSlider = document.getElementById('discountSlider').value;
   const reviewSlider = document.getElementById('reviewSlider').value;
+  const highlightToggle = document.getElementById('highlightToggle').checked;
+  const extensionEnabled = document.getElementById('extensionEnabledToggle').checked;
 
   const { rawWeights, proportions } = getWeightData();
   const storageProportions = {
@@ -112,18 +114,30 @@ function save_options() {
       t: proportions.age,
   };
 
-  chrome.storage.sync.set({
+  return {
     discountThreshold: -parseInt(discountSlider, 10),
     minPercentile: parseInt(reviewSlider, 10),
+    highlighting: highlightToggle,
     weights: storageProportions,
-    rawWeights: rawWeights
-  }, function() {
+    rawWeights: rawWeights,
+    extensionEnabled: extensionEnabled
+  };
+}
+
+function auto_save_options() {
+  const settings = get_settings_from_dom();
+  chrome.storage.sync.set(settings);
+}
+
+function save_options() {
+  const settings = get_settings_from_dom();
+  chrome.storage.sync.set(settings, function() {
     const status = document.getElementById('status');
     status.innerHTML = '<div class="alert alert-success p-2" role="alert">Options saved, refreshing...</div>';
     
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       if (tabs[0] && tabs[0].id) {
-        chrome.tabs.reload(tabs[0].id);
+        chrome.tabs.sendMessage(tabs[0].id, { action: "reload" });
       }
     });
 
@@ -136,15 +150,21 @@ function save_options() {
 function restore_options() {
   chrome.storage.sync.get({
     discountThreshold: -70,
-    minPercentile: 75,
-    rawWeights: { discount: 40, review: 25, popularity: 20, age: 15 },
-    weights: { d: 0.4, r: 0.25, v: 0.2, t: 0.15 }
+    minPercentile: 95,
+    highlighting: true,
+    rawWeights: { discount: 90, review: 90, popularity: 30, age: 10 },
+    weights: { d: 0.9, r: 0.9, v: 0.3, t: 0.1 },
+    extensionEnabled: true
   }, function(items) {
     const discountSlider = document.getElementById('discountSlider');
     const reviewSlider = document.getElementById('reviewSlider');
+    const highlightToggle = document.getElementById('highlightToggle');
+    const extensionEnabledToggle = document.getElementById('extensionEnabledToggle');
     
     discountSlider.value = -items.discountThreshold;
     reviewSlider.value = items.minPercentile;
+    highlightToggle.checked = items.highlighting;
+    extensionEnabledToggle.checked = items.extensionEnabled;
     
     weightInputs.discount.value = items.rawWeights.discount;
     weightInputs.review.value = items.rawWeights.review;
@@ -188,9 +208,24 @@ function handleReviewSliderChange() {
 
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('save').addEventListener('click', save_options);
-document.getElementById('discountSlider').addEventListener('input', updateDiscountLabel);
-document.getElementById('reviewSlider').addEventListener('input', updateReviewLabel);
-document.getElementById('reviewSlider').addEventListener('change', handleReviewSliderChange);
+
+document.getElementById('discountSlider').addEventListener('input', () => {
+    updateDiscountLabel();
+    auto_save_options();
+});
+
+document.getElementById('reviewSlider').addEventListener('input', () => {
+    updateReviewLabel();
+    auto_save_options();
+});
+
+document.getElementById('reviewSlider').addEventListener('change', () => {
+    handleReviewSliderChange();
+    auto_save_options();
+});
+
+document.getElementById('highlightToggle').addEventListener('change', auto_save_options);
+document.getElementById('extensionEnabledToggle').addEventListener('change', auto_save_options);
 
 Object.keys(weightInputs).forEach(key => {
     const input = weightInputs[key];
@@ -199,6 +234,7 @@ Object.keys(weightInputs).forEach(key => {
         input.addEventListener('input', () => {
             output.textContent = input.value;
             drawStarPlot();
+            auto_save_options();
         });
     }
 }); 

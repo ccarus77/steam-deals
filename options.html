@@ -5,218 +5,226 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Steam Deal Finder Settings</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        body { 
-            width: 320px; 
-            font-size: 0.9rem; 
-            background-color: #1b2838;
-            color: #c7d5e0;
-        }
-        .container { padding: 0.75rem; }
-        .slider-label { display: flex; justify-content: space-between; font-weight: bold; align-items: center; }
+body { 
+    width: 320px; 
+    font-size: 0.9rem; 
+    background-color: #1b2838;
+    color: #c7d5e0;
+}
+.container { padding: 0.75rem; }
+.slider-label { display: flex; justify-content: space-between; font-weight: bold; align-items: center; }
 
-        h5 {
-            color: #66c0f4;
-            border-bottom: 1px solid #2a475e;
-            padding-bottom: 5px;
-            margin-top: 1rem;
-        }
+h5 {
+    color: #66c0f4;
+    border-bottom: 1px solid #2a475e;
+    padding-bottom: 5px;
+    margin-top: 1rem;
+}
 
-        .card {
-            background-color: #171a21;
-            border: 1px solid #2a475e;
-        }
+.card {
+    background-color: #171a21;
+    border: 1px solid #2a475e;
+}
 
-        .form-label {
-            color: #c7d5e0;
-        }
+.form-label {
+    color: #c7d5e0;
+}
 
-        .form-range::-webkit-slider-thumb {
-            background: #66c0f4;
-        }
+.form-range::-webkit-slider-thumb {
+    background: #66c0f4;
+}
 
-        .form-range::-moz-range-thumb {
-            background: #66c0f4;
-        }
+.form-range::-moz-range-thumb {
+    background: #66c0f4;
+}
 
-        .form-range::-ms-thumb {
-            background: #66c0f4;
-        }
+.form-range::-ms-thumb {
+    background: #66c0f4;
+}
 
-        #reviewSentimentLabel {
-            background-color: #2a475e !important;
-            color: #c7d5e0;
-        }
-        
-        .btn-primary {
-            background-color: #66c0f4;
-            border-color: #66c0f4;
-            color: #171a21;
-            font-weight: bold;
-        }
+#reviewSentimentLabel {
+    background-color: #2a475e !important;
+    color: #c7d5e0;
+}
 
-        .btn-primary:hover {
-            background-color: #7ccff6;
-            border-color: #7ccff6;
-            color: #171a21;
-        }
+.btn-primary {
+    background-color: #66c0f4;
+    border-color: #66c0f4;
+    color: #171a21;
+    font-weight: bold;
+}
 
-        #reviewValue {
-            color: #66c0f4;
-        }
-       
-        .star-plot-container {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 20px auto 1rem auto;
-        }
+.btn-primary:hover {
+    background-color: #7ccff6;
+    border-color: #7ccff6;
+    color: #171a21;
+}
 
-        .star-plot-container .slider-label {
-            position: absolute;
-            width: 80px;
-            font-size: 0.8em;
-            color: #c7d5e0;
-            text-align: center;
-            display: block;
-        }
+#reviewValue {
+    color: #66c0f4;
+}
 
-        .label-value {
-            display: block;
-            color: #66c0f4;
-            font-weight: bold;
-        }
+.star-plot-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 20px auto 1rem auto;
+}
 
-        /* --- Label Positioning --- */
+.star-plot-container .slider-label {
+    position: absolute;
+    width: 80px;
+    font-size: 0.8em;
+    color: #c7d5e0;
+    text-align: center;
+    display: block;
+}
 
-        /* Top: Discount (vertical) */
-        .label-discount {
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
+.label-value {
+    display: block;
+    color: #66c0f4;
+    font-weight: bold;
+}
 
-        /* Bottom: Age (vertical) */
-        .label-age {
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
+/* --- Label Positioning --- */
 
-        /* Left: Review (horizontal) */
-        .label-review {
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-        }
+/* Top: Discount (vertical) */
+.label-discount {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
 
-        /* Right: Popularity (horizontal) */
-        .label-popularity {
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            
-        }
+/* Bottom: Age (vertical) */
+.label-age {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
 
-        .discount-container {
-            display: flex;
-            align-items: center;
-        }
+/* Left: Review (horizontal) */
+.label-review {
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
 
-        .discount_pct {
-            background-color: #4c6b22;
-            color: #a4d007;
-            padding: 3px 5px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
+/* Right: Popularity (horizontal) */
+.label-popularity {
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    
+}
 
-        .tooltip-icon {
-            position: relative;
-            cursor: pointer;
-            font-weight: bold;
-            color: #c7d5e0;
-            margin-left: 4px;
-            border: 1px solid #66c0f4;
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 10px;
-        }
+.discount-container {
+    display: flex;
+    align-items: center;
+}
 
-        .tooltip-icon::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #2a475e;
-            color: #c7d5e0;
-            padding: 5px 8px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            white-space: nowrap;
-            z-index: 10;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s ease, visibility 0.2s ease;
-        }
+.discount_pct {
+    background-color: #4c6b22;
+    color: #a4d007;
+    padding: 3px 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
 
-        .tooltip-icon:hover::after {
-            opacity: 1;
-            visibility: visible;
-        }
+.tooltip-icon {
+    position: relative;
+    cursor: pointer;
+    font-weight: bold;
+    color: #c7d5e0;
+    margin-left: 4px;
+    border: 1px solid #66c0f4;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+}
 
-        .form-range {
-            padding: 0;
-        }
-        .form-range::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 6px;
-            cursor: pointer;
-            background: #66c0f4;
-            border-radius: 5px;
-        }
-        .form-range::-webkit-slider-thumb {
-            height: 16px;
-            width: 16px;
-            border-radius: 50%;
-            background: #ffffff;
-            cursor: pointer;
-            -webkit-appearance: none;
-            margin-top: -5px;
-        }
-        .form-range:focus::-webkit-slider-thumb {
-            box-shadow: 0 0 0 0.25rem rgba(102, 192, 244, 0.25);
-        }
-        .form-range::-moz-range-track {
-            width: 100%;
-            height: 12px;
-            cursor: pointer;
-            background: #2a475e;
-            border-radius: 5px;
-        }
-        .form-range::-moz-range-thumb {
-            height: 24px;
-            width: 24px;
-            border-radius: 50%;
-            background: #66c0f4;
-            cursor: pointer;
-        }
+.tooltip-icon::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #2a475e;
+    color: #c7d5e0;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
 
+.tooltip-icon:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+.form-range {
+    padding: 0;
+}
+.form-range::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    cursor: pointer;
+    background: #66c0f4;
+    border-radius: 5px;
+}
+.form-range::-webkit-slider-thumb {
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -5px;
+}
+.form-range:focus::-webkit-slider-thumb {
+    box-shadow: 0 0 0 0.25rem rgba(102, 192, 244, 0.25);
+}
+.form-range::-moz-range-track {
+    width: 100%;
+    height: 12px;
+    cursor: pointer;
+    background: #2a475e;
+    border-radius: 5px;
+}
+.form-range::-moz-range-thumb {
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    background: #66c0f4;
+    cursor: pointer;
+} 
     </style>
 </head>
 <body>
     <div class="container">
-        <h5 class="mb-3">Filter</h5>
+        <div class="d-flex justify-content-between align-items-center mb-1">
+            <a href="https://store.steampowered.com/search/?specials=1" target="_blank" class="h5 mb-0 text-decoration-none">Steam Specials!</a>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="extensionEnabledToggle" checked>
+                <label class="form-check-label" for="extensionEnabledToggle">On</label>
+            </div>
+        </div>
 
-        <div class="card mb-3">
+        
+
+        <div class="card mb-1">
             <div class="card-body p-2">
                 <div class="slider-label">
-                    <label for="discountSlider" class="form-label">Min. Discount</label>
+                    <label for="discountSlider" class="form-label">Minimum Discount</label>
                     <div class="discount-container">
                         <div id="discountValue" class="discount_pct">-70%</div>
                     </div>
@@ -225,11 +233,12 @@
             </div>
         </div>
 
-       
+        
 
-        <h5 class="mb-3 mt-3">Scoring Weights</h5>
+        
         <div class="card">
             <div class="card-body p-2">
+                <p class="text-center small text-white-50 mb-2">Weigh what matters most to you in a "deal"</p>
                 <div class="star-plot-container">
                     <canvas id="starPlotCanvas" width="200" height="200"></canvas>
                     <div class="slider-label label-discount">
@@ -252,7 +261,7 @@
                         <output id="ageWeightValue" class="label-value">15%</output>
                     </div>
                 </div>
-
+                
                 <div id="weight-inputs">
                     <div class="row">
                         <div class="col">
@@ -299,8 +308,15 @@
                 </div>
             </div>
         </div>
+    <div style="display: none;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Highlight</h5>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="highlightToggle" checked>
+                <label class="form-check-label" for="highlightToggle"></label>
+            </div>
+        </div>
 
-        <h5 class="mb-3">Highlight</h5>
         <div class="card">
             <div class="card-body p-2">
                 <div class="slider-label">
@@ -320,9 +336,10 @@
                 </div>
             </div>
         </div>
+    </div>
         
         <div class="d-grid gap-2 mt-3">
-            <button id="save" class="btn btn-primary btn-sm">Save</button>
+            <button id="save" class="btn btn-primary btn-sm">Save and Refresh</button>
         </div>
         <div id="status" class="mt-2 text-center"></div>
     </div>

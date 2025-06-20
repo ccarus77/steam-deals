@@ -77,13 +77,13 @@ function initializeDealFinder() {
                 const releaseDate = releaseDateText ? new Date(releaseDateText) : new Date();
 
                 // Step 3: Highlight by review criteria
-                if (tooltipHtml && reviewScore >= settings.minPercentile) {
-                    a.css({
-                        'background-color': '#4a4a00',
-                        'box-shadow': '0 0 10px yellow'
-                    });
-                }
+                //if (settings.highlighting && reviewScore >= settings.minPercentile) {
+                    //a.find('.search_review_summary').addClass('deal-finder-highlight');
+                //}
 
+                if (settings.highlighting && tooltipHtml && reviewScore >= settings.minPercentile) {
+                    a.addClass('deal-finder-highlight');
+                }
                 // Step 4: Calculate and display score
                 let score = 0;
                 if (discount && reviewScore && numReviews && releaseDate) {
@@ -92,13 +92,14 @@ function initializeDealFinder() {
                     scoreDisplay.text(`Score: ${(score * 100).toFixed(2)}`);
                     scoreDisplay.css({
                         'position': 'absolute',
-                        'top': '5px',
-                        'right': '5px',
+                        'top': '4px',
+                        'right': '50px',
                         'color': 'white',
                         'background-color': 'rgba(0, 0, 0, 0.6)',
                         'padding': '2px 5px',
-                        'border-radius': '3px',
-                        'font-size': '12px'
+                        'border-radius': '5px',
+                        'font-size': '12px',
+                        'width': '45px'
                     });
                     a.css('position', 'relative').append(scoreDisplay);
                 }

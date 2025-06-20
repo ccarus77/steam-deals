@@ -8,11 +8,18 @@ s.onload = () => s.remove();
 chrome.storage.sync.get({
     discountThreshold: -70,
     minPercentile: 75,
-    weights: { d: 0.4, r: 0.25, v: 0.2, t: 0.15 }
+    highlighting: true,
+    weights: { d: 0.4, r: 0.25, v: 0.2, t: 0.15 },
+    extensionEnabled: true
 }, function(items) {
+    if (!items.extensionEnabled) {
+        return;
+    }
+
     const settings = {
         discountThreshold: items.discountThreshold,
         minPercentile: items.minPercentile,
+        highlighting: items.highlighting,
         weights: items.weights
     };
 
@@ -21,4 +28,10 @@ chrome.storage.sync.get({
     settingsDiv.setAttribute('data-settings', JSON.stringify(settings));
     settingsDiv.style.display = 'none';
     (document.head || document.documentElement).appendChild(settingsDiv);
+});
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.action === "reload") {
+        window.location.reload();
+    }
 }); 

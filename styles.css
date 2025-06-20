@@ -1,0 +1,11 @@
+@keyframes pulse {
+    0% { box-shadow: 0 0 2px rgb(223, 244, 102); }
+    50% { box-shadow: 0 0 10px rgb(223, 244, 102); }
+    100% { box-shadow: 0 0 2px rgb(223, 244, 102); }
+}
+
+.deal-finder-highlight {
+    background-color: #4a4a00 !important;
+    animation: pulse 2s infinite;
+    border-radius: 3px;
+}

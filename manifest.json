@@ -1,11 +1,10 @@
 {
   "manifest_version": 3,
   "name": "Steam Deal Finder",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Filters and highlights Steam search results based on user-defined criteria.",
   "permissions": [
-    "storage",
-    "tabs"
+    "storage"
   ],
   "host_permissions": [
     "https://store.steampowered.com/search/*"
@@ -22,6 +21,7 @@
     {
       "matches": ["https://store.steampowered.com/search/*"],
       "js": ["content.js"],
+      "css": ["styles.css"],
       "run_at": "document_idle"
     }
   ],
