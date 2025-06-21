@@ -25,6 +25,11 @@ function calculateDiscountQualityScore(discount, reviewStars, numReviews, releas
     return weights.d * d + weights.r * r + weights.v * v + weights.t * t;
 }
 
+function AddDummySortItem() {
+    $J("#sort_by_trigger").text("Deal Score")
+    $J($J("#sort_by_droplist li a")[0]).text("Deal Score");
+}
+
 function initializeDealFinder() {
     const settingsDiv = document.getElementById('steam-deal-finder-settings');
     if (!settingsDiv) {
@@ -42,6 +47,8 @@ function initializeDealFinder() {
         }
 
         const originalOnScroll = InitInfiniteScroll.oController.OnScroll;
+
+        AddDummySortItem();
 
         const runFilter = () => {
             // Process new rows
