@@ -15,9 +15,10 @@ function getStarRating(sentimentText) {
     }
 }
 
-function calculateDiscountQualityScore(discount, reviewStars, numReviews, releaseDate, weights) {
+function calculateDiscountQualityScore(reviewStars, numReviews, releaseDate, maxDiscount, priceDiff, weights) {
     const days = Math.max((Date.now() - releaseDate.getTime()) / 86400000, 1);
-    const d = Math.abs(discount) / 100;
+    
+    const d = Math.abs(priceDiff) / maxDiscount;
     const r = reviewStars / 5;
     const v = Math.log10(numReviews / days + 1) / Math.log10(50);
     const t = Math.max(0, 1 - (Math.log10(days) / Math.log10(3650)));
@@ -50,14 +51,19 @@ function initializeDealFinder() {
 
         AddDummySortItem();
 
+        var maxDiscount = 0;
+
         const runFilter = () => {
+
+            
+
             // Process new rows
             $J('a.search_result_row').each(function() {
                 const a = $J(this);
-                if (a.data('deal-finder-processed')) {
-                    return;
-                }
-                a.data('deal-finder-processed', true);
+                //if (a.data('deal-finder-processed')) {
+                //    return;
+                //}
+                //a.data('deal-finder-processed', true);
 
                 // Step 1: Filter by discount
                 const discountPctText = a.find('div.discount_pct').text().trim();
@@ -72,7 +78,11 @@ function initializeDealFinder() {
                     return;
                 }
 
-                // Step 2: Extract data for scoring and highlighting
+                const originalPrice = parseFloat(a.find('div.discount_original_price').text().trim().substring(1));
+                const discountPrice = parseFloat(a.find('div.discount_final_price').text().trim().substring(1));
+                const priceDiff = originalPrice - discountPrice;
+                if (maxDiscount < priceDiff) maxDiscount = priceDiff;
+
                 const discount = parseFloat(discountPctText.replace('-', '').replace('%', ''));
                 const tooltipHtml = a.find('span[data-tooltip-html]').attr('data-tooltip-html');
                 const sentimentText = tooltipHtml ? tooltipHtml.split('<br>')[0] : '';
@@ -99,7 +109,8 @@ function initializeDealFinder() {
                 // Step 4: Calculate and display score
                 let score = 0;
                 if (discount && reviewScore && numReviews && releaseDate) {
-                    score = calculateDiscountQualityScore(discount, reviewStars, numReviews, releaseDate, settings.weights);
+
+                    score = calculateDiscountQualityScore(reviewStars, numReviews, releaseDate, maxDiscount, priceDiff, settings.weights);
                     const scoreDisplay = $J('<div class="deal_score"></div>');
                     scoreDisplay.text(`Score: ${(score * 100).toFixed(2)}`);
                     scoreDisplay.css({
@@ -113,6 +124,7 @@ function initializeDealFinder() {
                         'font-size': '12px',
                         'width': '45px'
                     });
+                    a.find('.deal_score').remove();
                     a.css('position', 'relative').append(scoreDisplay);
                 }
                 a.data('deal-score', score);
